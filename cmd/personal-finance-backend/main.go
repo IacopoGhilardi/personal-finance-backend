@@ -1,38 +1,28 @@
 package main
 
 import (
-	// "os"
-	"github.com/gin-gonic/gin"
-	"github.com/IacopoGhilardi/personal-finance-backend/pkg/config"
+	"github.com/IacopoGhilardi/personal-finance-backend/pkg/config/database"
 	"github.com/IacopoGhilardi/personal-finance-backend/pkg/controllers"
-	// "github.com/IacopoGhilardi/personal-finance-backend/pkg/models"
+	"github.com/IacopoGhilardi/personal-finance-backend/pkg/routes"
 )
 
 func main() {
 
 	// Get Client, Context, CancelFunc and
     // err from connect method.
-    client, ctx, cancel, err := config.Connect("mongodb://localhost:27017")
+    client, ctx, cancel, err := database.Connect("mongodb://localhost:27017")
     if err != nil {
         panic(err)
     }
 
 	// Release resource when the main
     // function is returned.
-    defer config.Close(client, ctx, cancel)
+    defer database.Close(client, ctx, cancel)
      
     // Ping mongoDB with Ping method
-    config.Ping(client, ctx)
+    database.Ping(client, ctx)
 
 	userController.Create(client, ctx)
 
-	router := gin.Default()
-
-	router.GET("/ping", func (context *gin.Context) {
-		context.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	router.Run()
+	indexRoutes.InitRoutes()
 }
