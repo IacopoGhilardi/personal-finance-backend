@@ -1,14 +1,12 @@
 package userRoutes
 
 import (
+	bankController "github.com/IacopoGhilardi/personal-finance-backend/pkg/controllers/bank"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRoutes(router *gin.RouterGroup) {
 
-	router.GET("/token", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	router.GET("/token", bankController.GetAccessToken)
+	router.GET("/bank/list", bankController.GetBankList)
 }
